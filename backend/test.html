@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <script>
+        // Function to test the API and show the response
+        async function testOrders() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            try {
+                const response = await fetch('http://localhost:5005/api/orders', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<pre>Status: ${response.status}\n\nData: ${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="color: red;">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testTestEndpoint() {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.innerHTML = 'Testing...';
+            try {
+                const response = await fetch('http://localhost:5005/api/test', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<pre>Status: ${response.status}\n\nData: ${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="color: red;">Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>API Test Page</h1>
+    
+    <div>
+        <h2>Test /api/test endpoint</h2>
+        <button onclick="testTestEndpoint()">Test API Test</button>
+        <div id="testResult"></div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <h2>Test /api/orders endpoint</h2>
+        <button onclick="testOrders()">Test Orders API</button>
+        <div id="result"></div>
+    </div>
+</body>
+</html>

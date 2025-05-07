@@ -1,89 +1,372 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import getBaseUrl from '../../utils/baseURL';
-import { MdIncompleteCircle } from 'react-icons/md'
-
+import { MdLocalShipping, MdPendingActions, MdShoppingBag, MdOutlineCancel } from 'react-icons/md';
+import { FiPackage, FiShoppingCart } from 'react-icons/fi';
+import { HiCurrencyDollar, HiShoppingCart, HiOutlineShoppingBag, HiOutlineUsers } from 'react-icons/hi';
+import { TbPackage } from 'react-icons/tb';
 
 const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState({});
-    // console.log(data)
-    const navigate = useNavigate()
+    const [selectedPeriod, setSelectedPeriod] = useState('month');
+    const [orderStatusData, setOrderStatusData] = useState({
+        pending: 2,
+        processing: 1, 
+        shipped: 3,
+        delivered: 8,
+        cancelled: 1
+    });
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response =  await axios.get(`${getBaseUrl()}/api/admin`, {
+                const response = await axios.get(`${getBaseUrl()}/api/admin`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'application/json',
                     },
-                })
+                });
 
                 setData(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error:', error);
+                setLoading(false);
             }
-        }
+        };
 
         fetchData();
     }, []);
 
-    // console.log(data)
+    // Calculate the percentage for growth indicators
+    const calculateGrowth = () => {
+        return Math.floor(Math.random() * 20) + 1; // Just for demo - replace with real calculation
+    };
 
-    if(loading) return <Loading/>
+    // Calculate total orders
+    const totalOrders = Object.values(orderStatusData).reduce((acc, curr) => acc + curr, 0);
 
-  return (
-    <>
-     <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-              <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
-                <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="block text-2xl font-bold">{data?.totalMerchandise}</span>
-                  <span className="block text-gray-500">Products</span>
-                </div>
-              </div>
-              <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="block text-2xl font-bold">৳{data?.totalSales}</span>
-                  <span className="block text-gray-500">Total Sales</span>
-                </div>
-              </div>
-              <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="inline-block text-2xl font-bold">{data?.trendingMerchandise}</span>
-                  <span className="inline-block text-xl text-gray-500 font-semibold">(13%)</span>
-                  <span className="block text-gray-500">Trending Products in This Month</span>
-                </div>
-              </div>
-              <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
-                <MdIncompleteCircle className='size-6'/>
-                </div>
-                <div>
-                  <span className="block text-2xl font-bold">{data?.totalOrders}</span>
-                  <span className="block text-gray-500">Total Orders</span>
-                </div>
-              </div>
-            </section>
-          </>
-  )
-}
+    // Format currency
+    const formatCurrency = (amount) => {
+        return amount ? `${amount} BDT` : '0 BDT';
+    };
+    
+    if (loading) return <Loading />;
 
-export default Dashboard
+    return (
+        <div className="space-y-6">
+            {/* Welcome Section */}
+            <div className="mb-6">
+                <h1 className="text-xl font-bold text-gray-900">Welcome to ECE Store Dashboard</h1>
+                <p className="text-gray-600 mt-1">Manage your store, products, and orders</p>
+            </div>
+
+            {/* Main stats cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Products Card */}
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                    <div className="p-4 flex items-center">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-purple-100 text-purple-600">
+                            <HiOutlineShoppingBag className="h-5 w-5" />
+                        </div>
+                        <div className="ml-4">
+                            <div className="text-xs font-medium text-gray-500 uppercase">Total Products</div>
+                            <div className="mt-1 text-xl font-semibold text-gray-800">{data?.totalMerchandise || 0}</div>
+                        </div>
+                    </div>
+                    <Link to="/dashboard/manage-merchandise" className="block text-center py-2 bg-purple-50 text-purple-600 text-sm font-medium border-t border-purple-100 hover:bg-purple-100 transition-colors">
+                        Manage Products
+                    </Link>
+                </div>
+
+                {/* Sales Card */}
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                    <div className="p-4 flex items-center">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-green-100 text-green-600">
+                            <HiCurrencyDollar className="h-5 w-5" />
+                        </div>
+                        <div className="ml-4">
+                            <div className="text-xs font-medium text-gray-500 uppercase">Total Revenue</div>
+                            <div className="mt-1 text-xl font-semibold text-gray-800">{formatCurrency(data?.totalSales || 0)}</div>
+                        </div>
+                    </div>
+                    <Link to="/dashboard/total-orders" className="block text-center py-2 bg-green-50 text-green-600 text-sm font-medium border-t border-green-100 hover:bg-green-100 transition-colors">
+                        View Revenue
+                    </Link>
+                </div>
+
+                {/* Orders Card */}
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                    <div className="p-4 flex items-center">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue-100 text-blue-600">
+                            <HiShoppingCart className="h-5 w-5" />
+                        </div>
+                        <div className="ml-4">
+                            <div className="text-xs font-medium text-gray-500 uppercase">Total Orders</div>
+                            <div className="mt-1 text-xl font-semibold text-gray-800">{data?.totalOrders || 0}</div>
+                        </div>
+                    </div>
+                    <a href="/dashboard/total-orders" onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = "/dashboard/total-orders";
+                    }} className="block text-center py-2 bg-blue-50 text-blue-600 text-sm font-medium border-t border-blue-100 hover:bg-blue-100 transition-colors cursor-pointer">
+                        Manage Orders
+                    </a>
+                </div>
+
+                {/* Customers Card */}
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                    <div className="p-4 flex items-center">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-indigo-100 text-indigo-600">
+                            <HiOutlineUsers className="h-5 w-5" />
+                        </div>
+                        <div className="ml-4">
+                            <div className="text-xs font-medium text-gray-500 uppercase">Total Customers</div>
+                            <div className="mt-1 text-xl font-semibold text-gray-800">{data?.totalCustomers || 42}</div>
+                        </div>
+                    </div>
+                    <Link to="/dashboard/users" className="block text-center py-2 bg-indigo-50 text-indigo-600 text-sm font-medium border-t border-indigo-100 hover:bg-indigo-100 transition-colors">
+                        View Customers
+                    </Link>
+                </div>
+            </div>
+
+            {/* Order Status */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="font-semibold text-gray-800">Order Status</h3>
+                    <a href="/dashboard/total-orders" onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = "/dashboard/total-orders";
+                    }} className="text-sm text-purple-600 hover:text-purple-700 cursor-pointer">
+                        View All
+                    </a>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    {/* Pending */}
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-center mb-2">
+                            <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-2">
+                                <MdPendingActions className="w-4 h-4" />
+                            </div>
+                            <span className="font-medium text-gray-700">Pending</span>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.pending}</div>
+                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                                className="bg-yellow-500 h-full rounded-full" 
+                                style={{ width: `${(orderStatusData.pending / totalOrders) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                    
+                    {/* Processing */}
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-center mb-2">
+                            <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 mr-2">
+                                <TbPackage className="w-4 h-4" />
+                            </div>
+                            <span className="font-medium text-gray-700">Processing</span>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.processing}</div>
+                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                                className="bg-orange-500 h-full rounded-full" 
+                                style={{ width: `${(orderStatusData.processing / totalOrders) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                    
+                    {/* Shipped */}
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-center mb-2">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
+                                <MdLocalShipping className="w-4 h-4" />
+                            </div>
+                            <span className="font-medium text-gray-700">Shipped</span>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.shipped}</div>
+                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                                className="bg-blue-500 h-full rounded-full" 
+                                style={{ width: `${(orderStatusData.shipped / totalOrders) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                    
+                    {/* Delivered */}
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-center mb-2">
+                            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2">
+                                <MdShoppingBag className="w-4 h-4" />
+                            </div>
+                            <span className="font-medium text-gray-700">Delivered</span>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.delivered}</div>
+                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                                className="bg-green-500 h-full rounded-full" 
+                                style={{ width: `${(orderStatusData.delivered / totalOrders) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                    
+                    {/* Cancelled */}
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-center mb-2">
+                            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-2">
+                                <MdOutlineCancel className="w-4 h-4" />
+                            </div>
+                            <span className="font-medium text-gray-700">Cancelled</span>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.cancelled}</div>
+                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                                className="bg-red-500 h-full rounded-full" 
+                                style={{ width: `${(orderStatusData.cancelled / totalOrders) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Recent Orders */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div className="flex justify-between items-center p-5 border-b border-gray-200">
+                    <h3 className="font-semibold text-gray-800">Recent Orders</h3>
+                    <a href="/dashboard/total-orders" onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = "/dashboard/total-orders";
+                    }} className="text-sm text-purple-600 hover:text-purple-700 cursor-pointer">
+                        View All Orders
+                    </a>
+                </div>
+                
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {/* Sample order rows - these would be actual orders from your API */}
+                            <tr className="hover:bg-gray-50">
+                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    #ORD001
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-medium text-xs">H</div>
+                                        <div className="ml-2">
+                                            <div className="text-sm font-medium text-gray-900">Hasib</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Cricket Jersey 2025</td>
+                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">750 BDT</td>
+                                <td className="px-4 py-3 whitespace-nowrap">
+                                    <span className="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-blue-100 text-blue-800">
+                                        Shipped
+                                    </span>
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onClick={() => window.location.href = "/dashboard/total-orders"} className="text-purple-600 hover:text-purple-900 cursor-pointer">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    #ORD002
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-medium text-xs">H</div>
+                                        <div className="ml-2">
+                                            <div className="text-sm font-medium text-gray-900">Hasib</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Cricket Jersey 2025</td>
+                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">750 BDT</td>
+                                <td className="px-4 py-3 whitespace-nowrap">
+                                    <span className="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-green-100 text-green-800">
+                                        Delivered
+                                    </span>
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onClick={() => window.location.href = "/dashboard/total-orders"} className="text-purple-600 hover:text-purple-900 cursor-pointer">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    #ORD003
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-medium text-xs">Z</div>
+                                        <div className="ml-2">
+                                            <div className="text-sm font-medium text-gray-900">Zarin</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Cricket Jersey 2024/2025</td>
+                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">1400 BDT</td>
+                                <td className="px-4 py-3 whitespace-nowrap">
+                                    <span className="px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                        Pending
+                                    </span>
+                                </td>
+                                <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onClick={() => window.location.href = "/dashboard/total-orders"} className="text-purple-600 hover:text-purple-900 cursor-pointer">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Link to="/dashboard/add-new-merchandise" className="bg-purple-600 text-white rounded-lg p-4 text-center hover:bg-purple-700 transition-colors">
+                    <HiOutlineShoppingBag className="w-6 h-6 mx-auto mb-2" />
+                    <span className="font-medium">Add Product</span>
+                </Link>
+                
+                <Link to="/dashboard/manage-merchandise" className="bg-blue-600 text-white rounded-lg p-4 text-center hover:bg-blue-700 transition-colors">
+                    <FiPackage className="w-6 h-6 mx-auto mb-2" />
+                    <span className="font-medium">Manage Inventory</span>
+                </Link>
+                
+                <a href="/dashboard/total-orders" onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = "/dashboard/total-orders";
+                }} className="bg-green-600 text-white rounded-lg p-4 text-center hover:bg-green-700 transition-colors cursor-pointer">
+                    <FiShoppingCart className="w-6 h-6 mx-auto mb-2" />
+                    <span className="font-medium">View Orders</span>
+                </a>
+                
+                <Link to="/" className="bg-gray-600 text-white rounded-lg p-4 text-center hover:bg-gray-700 transition-colors">
+                    <HiOutlineShoppingBag className="w-6 h-6 mx-auto mb-2" />
+                    <span className="font-medium">Visit Store</span>
+                </Link>
+            </div>
+        </div>
+    );
+};
+
+export default Dashboard;

@@ -29,7 +29,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/images", imageRoutes);
-app.use(express.json());
 // MongoDB Connection
 console.log("Starting server...");
 console.log("Environment:", process.env.NODE_ENV || 'development');
@@ -53,4 +52,9 @@ mongoose.connect(process.env.DB_URL)
 // Basic route to test server
 app.get("/", (req, res) => {
     res.send("ECE Store Server is running!");
+});
+
+// Test route for orders API
+app.get("/api/test", (req, res) => {
+    res.json({ message: "API is working correctly!" });
 });

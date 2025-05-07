@@ -16,6 +16,7 @@ import ManageMerchandise from "../pages/dashboard/manageMerchandise/ManageMercha
 import AddMerchandise from "../pages/dashboard/addMerchandise/AddMerchandise";
 import UpdateMerchandise from "../pages/dashboard/EditMerchandise/UpdateMerchandise";
 import UserDashboard from "../pages/dashboard/users/UserDashboard";
+import TotalOrders from "../pages/dashboard/totalOrders/TotalOrders";
 import Shop from "../pages/shop/Shop";
 import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
@@ -102,6 +103,12 @@ const router = createBrowserRouter([
           path: "manage-merchandise",
           element: <AdminRoute>
             <ManageMerchandise/>
+          </AdminRoute>
+        },
+        {
+          path: "total-orders",
+          element: <AdminRoute>
+            <TotalOrders/>
           </AdminRoute>
         }
       ]
