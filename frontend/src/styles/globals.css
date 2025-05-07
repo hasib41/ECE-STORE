@@ -1,0 +1,136 @@
+/* Custom Global Styles for ECE Store */
+
+/* Import Tailwind CSS base styles */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Font imports - example with Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Custom variables */
+:root {
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-secondary: #10b981;
+  --color-accent: #8b5cf6;
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
+  --color-background: #ffffff;
+  --color-background-alt: #f9fafb;
+  --color-border: #e5e7eb;
+}
+
+/* Base styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+/* Button styles */
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white font-medium rounded-lg px-5 py-2.5 transition-colors hover:bg-primary-dark focus:ring-4 focus:ring-primary/30 focus:outline-none;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-gray-800 font-medium rounded-lg border border-gray-300 px-5 py-2.5 transition-colors hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-none;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent text-primary font-medium rounded-lg border border-primary px-5 py-2.5 transition-colors hover:bg-primary hover:text-white focus:ring-4 focus:ring-primary/30 focus:outline-none;
+  }
+}
+
+/* Card styles */
+.card {
+  @apply bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md;
+}
+
+/* Input styles */
+.form-input {
+  @apply w-full px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary focus:outline-none transition-all;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Badge styles */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-primary {
+  @apply bg-primary/10 text-primary;
+}
+
+.badge-secondary {
+  @apply bg-secondary/10 text-secondary;
+}
+
+/* Product Grid */
+.product-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6;
+}
+
+/* Navbar active link */
+.nav-link-active {
+  @apply text-primary font-medium;
+}
+
+/* Container for consistent spacing */
+.container-custom {
+  @apply max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Section spacing */
+.section-spacing {
+  @apply py-12 md:py-16 lg:py-20;
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-medium leading-tight;
+}
+
+h1 {
+  @apply text-4xl md:text-5xl mb-6;
+}
+
+h2 {
+  @apply text-3xl md:text-4xl mb-5;
+}
+
+h3 {
+  @apply text-2xl md:text-3xl mb-4;
+}
+
+h4 {
+  @apply text-xl md:text-2xl mb-3;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

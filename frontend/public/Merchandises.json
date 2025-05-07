@@ -1,0 +1,106 @@
+[
+    {
+      "_id": 1,
+  "title": "Cricket Jersey 2025",
+  "description": "Team ECE Official Cricket Jersey of Inter Discipline Cricket Tournament 2025",
+  "category": "Cricket Jersey",
+  "coverImage": "Cricket Jersey -2025.jpg",
+  "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+  "sleeve": ["Half Sleeve", "Full Sleeve"],
+  "year": 2025,
+  "price": 750
+      
+    },
+    {
+      "_id": 2,
+      "title": "Cricket Jersey 2024",
+  "description": "Team ECE Official Cricket Jersey of Inter Discipline Cricket Tournament 2024",
+  "category": "Cricket Jersey",
+  "coverImage": "Cricket Jersey -2024.jpg",
+  "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+  "sleeve": ["Half Sleeve", "Full Sleeve"],
+  "year": 2024,
+  "price": 650
+     
+    },
+    {
+      "_id": 3,
+      "title": "Cricket Jersey 2023",
+  "description": "Team ECE Official Cricket Jersey of Inter Discipline Cricket Tournament 2023",
+  "category": "Cricket Jersey",
+  "coverImage": "Cricket Jersey -2023.jpg",
+  "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+  "sleeve": ["Half Sleeve", "Full Sleeve"],
+  "year": 2023,
+  "price": 600
+    },
+    {
+      "_id": 4,
+      "title": "Fan T-Shirt 2025",
+      "description": "Team ECE Fan T-Shirt of Inter Discipline Cricket Tournament 2025",
+      "category": "Fan T-Shirt",
+      "coverImage": "Fan t-shirt -2025.jpg",
+      "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+      "sleeve": ["Half Sleeve"],
+      "year": 2025,
+      "price": 250
+      
+    },
+    {
+      "_id": 5,
+      "title": "Football Jersey 2024",
+      "description": "Team ECE Official Football Jersey of Inter Discipline Football Tournament 2024",
+      "category": "Football Jersey",
+      "coverImage": "Football Jersey -2024.jpg",
+      "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+      "sleeve": ["Half Sleeve", "Full Sleeve"],
+      "year": 2024,
+      "price": 650
+    },
+     
+    {
+      "_id": 6,
+      "title": "Volleyball Jersey 2025",
+      "description": "Team ECE Official Volleyball Jersey of Inter Discipline Volleyball Tournament 2025",
+      "category": "Volleyball Jersey",
+      "coverImage": "Volleyball Jersey -2025.jpg",
+      "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+      "sleeve": ["Half Sleeve", "Full Sleeve"],
+      "year": 2025,
+      "price": 750
+      
+    },
+    {
+      "_id": 7,
+      "title": "Volleyball Jersey 2023",
+      "description": "Team ECE Official Volleyball Jersey of Inter Discipline Volleyball Tournament 2023",
+      "category": "Volleyball Jersey",
+      "coverImage": "Volleyball Jersey -2023.jpg",
+      "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+      "sleeve": ["Half Sleeve", "Full Sleeve"],
+      "year": 2023,
+      "price": 600
+      
+    },
+    {
+      "_id": 8,
+      "title": "Volleyball Jersey 2022",
+      "description": "Team ECE Official Volleyball Jersey of Inter Discipline Volleyball Tournament 2022",
+      "category": "Volleyball Jersey",
+      "coverImage": "Volleyball Jersey -2022.jpg",
+      "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+      "sleeve": ["Half Sleeve", "Full Sleeve"],
+      "year": 2022,
+      "price": 550
+    },
+    {
+      "_id": 9,
+      "title": "ECE Hoodie 2024",
+      "description": "Latest Addition in the Winter Collection of ECE",
+      "category": "Winter Collection",
+      "coverImage": "Hoodie -2024.jpg",
+      "availableSizes": ["XS","S", "M", "L", "XL", "XXL"],
+      "year": 2024,
+      "price": 750
+    }   
+  ]
