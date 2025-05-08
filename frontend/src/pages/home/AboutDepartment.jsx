@@ -10,7 +10,7 @@ const AboutDepartment = () => {
             Our ECE Legacy
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            The ECE Department at Khulna University, established in 1991
+            The ECE Department at Khulna University, established in 1997
           </p>
         </div>
 
@@ -18,7 +18,7 @@ const AboutDepartment = () => {
           {/* Content Column */}
           <div>
             <p className="text-gray-700 mb-6">
-              The Department of ECE at Khulna University is one of the leading engineering departments in Bangladesh. Since 1991, we've been committed to excellence in education and research.
+              The Department of ECE at Khulna University is one of the leading engineering departments in Bangladesh. Since 1997, we've been committed to excellence in education and research.
             </p>
             <p className="text-gray-700 mb-6">
               Our students receive hands-on training in modern technologies, telecommunications, and computing through well-equipped laboratories and experienced faculty members.

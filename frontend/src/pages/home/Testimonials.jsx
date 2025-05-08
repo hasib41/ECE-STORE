@@ -89,7 +89,6 @@ const Testimonials = () => {
           <p className="text-gray-700 text-lg italic max-w-2xl mx-auto">
             "Our ECE store is dedicated to providing high-quality merchandise that represents the pride and spirit of our department. We're committed to customer satisfaction and creating products that last."
           </p>
-          <p className="font-medium text-gray-900 mt-3">- ECE Store Team</p>
         </div>
       </div>
     </section>
