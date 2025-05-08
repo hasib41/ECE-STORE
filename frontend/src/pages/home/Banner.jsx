@@ -1,58 +1,45 @@
-
 import React from 'react';
 import bannerImg from "../../assets/ChampionBanner.jpg";
+import eceLogo from "../../assets/ECE_LOGO.jpg";
 import { Link } from 'react-router-dom';
 
 const Banner = () => {
   return (
-    <div className="relative overflow-hidden bg-gray-900">
-      {/* Background Image with Overlay */}
+    <div className="relative bg-gray-900 min-h-[70vh] flex items-center">
+      {/* Background image with overlay */}
       <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-gray-900/70"></div>
         <img 
           src={bannerImg} 
-          alt="ECE Champion Banner"
-          className="w-full h-full object-cover object-center"
+          alt="ECE Banner"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-900/30 mix-blend-multiply" />
       </div>
       
-      {/* Content Container */}
-      <div className="relative max-w-screen-xl mx-auto px-4 py-24 sm:py-32 lg:py-40 flex flex-col items-start justify-center">
-        <div className="max-w-xl">
-          {/* Optional badge */}
-          <span className="inline-block bg-primary/90 text-white text-sm px-3 py-1 rounded-full font-medium mb-4">
-            ECE Official Store
-          </span>
-          
-          {/* Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            <span className="block">We Will</span>
-            <span className="block text-primary">Rock You</span>
-          </h1>
-          
-          {/* Description */}
-          <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-lg">
-            Welcome to the Official Merchandise Store of the Prestigious Electronics & Communication Engineering Discipline of Khulna University.
-          </p>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-4">
-            <Link to="/shop" className="inline-block bg-primary hover:bg-primary-dark text-white font-medium px-8 py-3 rounded-lg transition-colors duration-300">
-              Shop Now
-            </Link>
-            <Link to="/about" className="inline-block bg-white/10 hover:bg-white/20 text-white font-medium border border-white/20 px-8 py-3 rounded-lg transition-colors duration-300">
-              Learn More
-            </Link>
-          </div>
+      {/* Content */}
+      <div className="relative w-full max-w-4xl mx-auto px-4 py-8 text-center">
+        <div className="flex items-center justify-center mb-4">
+          <img src={eceLogo} alt="ECE Logo" className="w-8 h-8 rounded-full mr-2" />
+          <span className="text-primary font-bold">ECE Official Store</span>
         </div>
-      </div>
-      
-      {/* Optional Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-white/50 animate-bounce hidden sm:flex">
-        <span className="text-sm mb-1">Scroll Down</span>
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
+        
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+          We Will Rock You
+        </h1>
+        
+        <p className="text-gray-300 max-w-xl mx-auto mb-8">
+        Welcome to the Official Merchandise Store of the Prestigious Electronics & Communication Engineering Discipline of Khulna University.
+        </p>
+        
+        {/* Action buttons */}
+        <div className="flex gap-4 justify-center">
+          <Link to="/shop" className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90">
+            Shop Now
+          </Link>
+          <Link to="/about" className="px-6 py-3 border border-white/20 text-white rounded-lg hover:bg-white/10">
+            Learn More
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -84,59 +84,7 @@ const About = () => {
         </div>
       </div>
 
-      {/* Team Section */}
-      <div className="max-w-screen-xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Our Team</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Team Member 1 */}
-          <div className="text-center">
-            <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-4 bg-gray-200">
-              {/* Replace with actual image */}
-              <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-gray-900">Ashraful Islam</h3>
-            <p className="text-primary">Founder & CEO</p>
-          </div>
-          
-          {/* Team Member 2 */}
-          <div className="text-center">
-            <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-4 bg-gray-200">
-              {/* Replace with actual image */}
-              <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-gray-900">Zarin Zeba</h3>
-            <p className="text-primary">Head of Design</p>
-          </div>
-          
-          {/* Team Member 3 */}
-          <div className="text-center">
-            <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-4 bg-gray-200">
-              {/* Replace with actual image */}
-              <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-gray-900">Mehedi Hasan</h3>
-            <p className="text-primary">Operations Manager</p>
-          </div>
-          
-          {/* Team Member 4 */}
-          <div className="text-center">
-            <div className="w-36 h-36 rounded-full overflow-hidden mx-auto mb-4 bg-gray-200">
-              {/* Replace with actual image */}
-              <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-gray-900">Arefin Khan</h3>
-            <p className="text-primary">Customer Support</p>
-          </div>
-        </div>
-      </div>
+
 
       {/* CTA Section */}
       <div className="bg-primary py-16">
