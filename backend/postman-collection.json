@@ -1,0 +1,494 @@
+{
+	"info": {
+		"_postman_id": "ece-store-api-collection",
+		"name": "ECE-Store API",
+		"description": "API collection for ECE-Store project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5005",
+			"type": "string",
+			"description": "Base URL for the API"
+		},
+		{
+			"key": "adminToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDE2MjIyMmQ0NDFlMGIwYzBhZjg4YSIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDY3ODY5ODksImV4cCI6MTc0Njc5MDU4OX0.EZOVl9qYsiBneaZYyH83XU4NFGU-LtYj-m8E9ncJx1M",
+			"type": "string",
+			"description": "Admin JWT token"
+		}
+	],
+	"item": [
+		{
+			"name": "Server Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}",
+					"host": [
+						"{{baseUrl}}"
+					]
+				},
+				"description": "Check if the server is running"
+			}
+		},
+		{
+			"name": "API Test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/test",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"test"
+					]
+				},
+				"description": "Test if the API is working correctly"
+			}
+		},
+		{
+			"name": "Merchandise",
+			"item": [
+				{
+					"name": "Get All Merchandise",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/merchandises",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"merchandises"
+							]
+						},
+						"description": "Retrieve all merchandise items"
+					}
+				},
+				{
+					"name": "Get Single Merchandise",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/merchandises/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"merchandises",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Merchandise ID"
+								}
+							]
+						},
+						"description": "Retrieve a specific merchandise item by ID"
+					}
+				},
+				{
+					"name": "Create Merchandise",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Cricket Jersey\",\n    \"description\": \"High-quality cricket jersey with ECE logo\",\n    \"category\": \"Jersey\",\n    \"coverImage\": \"http://localhost:5005/images/Cricket Jersey -2023.jpg\",\n    \"availableSizes\": [\"S\", \"M\", \"L\", \"XL\"],\n    \"sleeve\": [\"Full Sleeve\", \"Half Sleeve\"],\n    \"year\": 2023,\n    \"Price\": 1200\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/merchandises/create-merchandise",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"merchandises",
+								"create-merchandise"
+							]
+						},
+						"description": "Create a new merchandise item (admin only)"
+					}
+				},
+				{
+					"name": "Update Merchandise",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Cricket Jersey\",\n    \"description\": \"Updated high-quality cricket jersey with ECE logo\",\n    \"category\": \"Jersey\",\n    \"coverImage\": \"http://localhost:5005/images/Cricket Jersey -2023.jpg\",\n    \"availableSizes\": [\"S\", \"M\", \"L\", \"XL\", \"XXL\"],\n    \"sleeve\": [\"Full Sleeve\"],\n    \"year\": 2024,\n    \"Price\": 1100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/merchandises/edit/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"merchandises",
+								"edit",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Merchandise ID to update"
+								}
+							]
+						},
+						"description": "Update an existing merchandise item (admin only)"
+					}
+				},
+				{
+					"name": "Delete Merchandise",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/merchandises/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"merchandises",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Merchandise ID to delete"
+								}
+							]
+						},
+						"description": "Delete a merchandise item (admin only)"
+					}
+				}
+			],
+			"description": "Endpoints for managing merchandise"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						},
+						"description": "Retrieve all orders"
+					}
+				},
+				{
+					"name": "Get Orders by Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/email/:email",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"email",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "",
+									"description": "User's email"
+								}
+							]
+						},
+						"description": "Retrieve orders for a specific user by email"
+					}
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"customer@example.com\",\n    \"name\": \"John Doe\",\n    \"phone\": \"01700000000\",\n    \"productIds\": [\"65efc5d7b952c3ab37eac75a\"],\n    \"totalPrice\": 1150,\n    \"paymentMethod\": \"Mobile Banking\",\n    \"transactionId\": \"TXN123456789\",\n    \"size\": \"M\",\n    \"sleeveType\": \"Full Sleeve\",\n    \"NameOnJersey\": \"John\",\n    \"NumberOnJersey\": \"10\",\n    \"studentId\": \"210105\",\n    \"address\": \"Khulna University, Khulna\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						},
+						"description": "Create a new order"
+					}
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"processing\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/:id/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								":id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Order ID"
+								}
+							]
+						},
+						"description": "Update the status of an order (admin only)"
+					}
+				},
+				{
+					"name": "Debug Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/debug/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"debug",
+								"transactions"
+							]
+						},
+						"description": "Debug endpoint for mobile banking transactions"
+					}
+				}
+			],
+			"description": "Endpoints for managing orders"
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData && jsonData.token) {",
+									"    pm.variables.set(\"adminToken\", jsonData.token);",
+									"    console.log(\"Admin token saved to variable\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/admin",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"admin"
+							]
+						},
+						"description": "Authenticate as admin and get JWT token"
+					}
+				}
+			],
+			"description": "Authentication endpoints"
+		},
+		{
+			"name": "Admin Stats",
+			"item": [
+				{
+					"name": "Get Admin Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin"
+							]
+						},
+						"description": "Get admin dashboard statistics"
+					}
+				}
+			],
+			"description": "Admin dashboard statistics endpoints"
+		},
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "Get Image List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/images/list",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"images",
+								"list"
+							]
+						},
+						"description": "Get a list of all available images"
+					}
+				},
+				{
+					"name": "Upload Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": null,
+									"description": "Image file to upload"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/images/upload",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"images",
+								"upload"
+							]
+						},
+						"description": "Upload a new image"
+					}
+				}
+			],
+			"description": "Endpoints for managing images"
+		}
+	]
+}
