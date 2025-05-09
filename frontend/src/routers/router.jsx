@@ -15,11 +15,13 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ManageMerchandise from "../pages/dashboard/manageMerchandise/ManageMerchandise";
 import AddMerchandise from "../pages/dashboard/addMerchandise/AddMerchandise";
 import UpdateMerchandise from "../pages/dashboard/EditMerchandise/UpdateMerchandise";
-import UserDashboard from "../pages/dashboard/users/UserDashboard";
 import TotalOrders from "../pages/dashboard/totalOrders/TotalOrders";
 import Shop from "../pages/shop/Shop";
 import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
+import Settings from "../pages/dashboard/settings/Settings";
+import Help from "../pages/dashboard/help/Help";
+import UserDashboard from "../pages/dashboard/users/UserDashboard";
 
 const router = createBrowserRouter([
     {
@@ -109,6 +111,18 @@ const router = createBrowserRouter([
           path: "total-orders",
           element: <AdminRoute>
             <TotalOrders/>
+          </AdminRoute>
+        },
+        {
+          path: "settings",
+          element: <AdminRoute>
+            <Settings/>
+          </AdminRoute>
+        },
+        {
+          path: "help",
+          element: <AdminRoute>
+            <Help/>
           </AdminRoute>
         }
       ]

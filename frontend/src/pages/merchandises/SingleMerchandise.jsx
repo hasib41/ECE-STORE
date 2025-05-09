@@ -116,7 +116,7 @@ const SingleMerchandise = () => {
                         <div className="mb-6">
                             <h1 className="text-3xl font-bold text-gray-900 mb-2">{merchandise.title}</h1>
                             <div className="flex items-center mb-4">
-                                <span className="text-2xl font-bold text-gray-900">৳{merchandise.price}</span>
+                                <span className="text-2xl font-bold text-gray-900">৳{merchandise.Price}</span>
                                 {merchandise.oldPrice && (
                                     <span className="ml-3 text-gray-500 line-through">৳{merchandise.oldPrice}</span>
                                 )}

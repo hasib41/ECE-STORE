@@ -24,33 +24,120 @@ const TotalOrders = () => {
       console.error('Parsing error detected - likely receiving HTML instead of JSON');
       console.error('Error details:', error);
     }
-  }, [orders, isLoading, isError, error]);
+    
+    // Debug orders data - specifically transaction IDs
+    if (orders && orders.length > 0) {
+      console.log('Total orders loaded:', orders.length);
+      
+      // Debug date filtering
+      if (dateFilter !== 'all') {
+        console.log(`Date filter active: ${dateFilter}`);
+        const today = new Date();
+        
+        // Calculate date filter boundaries
+        const startOfToday = new Date(today);
+        startOfToday.setHours(0, 0, 0, 0);
+        
+        const endOfToday = new Date(today);
+        endOfToday.setHours(23, 59, 59, 999);
+        
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+        
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        
+        console.log('Date filter boundaries:');
+        console.log('- Current time:', today.toISOString());
+        console.log('- Start of today:', startOfToday.toISOString());
+        console.log('- End of today:', endOfToday.toISOString());
+        console.log('- Start of week:', startOfWeek.toISOString());
+        console.log('- Start of month:', startOfMonth.toISOString());
+        
+        // Count orders matching date filter
+        const ordersMatchingDateFilter = orders.filter(order => {
+          const orderDate = new Date(order.createdAt);
+          if (dateFilter === 'today') {
+            return orderDate >= startOfToday && orderDate <= endOfToday;
+          } else if (dateFilter === 'week') {
+            return orderDate >= startOfWeek;
+          } else if (dateFilter === 'month') {
+            return orderDate >= startOfMonth;
+          }
+          return true;
+        });
+        
+        console.log(`Orders matching "${dateFilter}" filter: ${ordersMatchingDateFilter.length} out of ${orders.length}`);
+        
+        // Sample a few orders to verify date filtering
+        const sampleSize = Math.min(5, orders.length);
+        console.log(`Sample of ${sampleSize} orders with their dates:`);
+        orders.slice(0, sampleSize).forEach(order => {
+          const orderDate = new Date(order.createdAt);
+          console.log(`Order ${order._id} - created: ${orderDate.toISOString()}`);
+        });
+      }
+      
+      const mobileOrders = orders.filter(o => o.paymentMethod === 'Mobile Banking');
+      if (mobileOrders.length > 0) {
+        console.log('Mobile banking orders:', mobileOrders.length);
+        console.log('Transaction ID inspection:');
+        mobileOrders.forEach(order => {
+          console.log(`Order ${order._id} - transactionId:`, order.transactionId);
+          console.log(`Order has transactionId property:`, 'transactionId' in order);
+          console.log(`Transaction ID type:`, typeof order.transactionId);
+          console.log(`Transaction ID value is null:`, order.transactionId === null);
+          console.log(`Transaction ID is empty string:`, order.transactionId === '');
+          console.log(`Transaction ID is undefined:`, order.transactionId === undefined);
+          console.log(`Order fields:`, Object.keys(order));
+        });
+      }
+    }
+  }, [orders, isLoading, isError, error, dateFilter]);
 
   // Filter orders based on search term and filters
   const filteredOrders = orders ? orders.filter(order => {
     const matchesSearch = searchTerm === '' || 
       order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.phone?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
     
     let matchesDate = true;
-    const orderDate = new Date(order.createdAt);
-    const today = new Date();
-    const startOfToday = new Date(today.setHours(0, 0, 0, 0));
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    
-    if (dateFilter === 'today') {
-      matchesDate = orderDate >= startOfToday;
-    } else if (dateFilter === 'week') {
-      matchesDate = orderDate >= startOfWeek;
-    } else if (dateFilter === 'month') {
-      matchesDate = orderDate >= startOfMonth;
+    if (order.createdAt && dateFilter !== 'all') {
+      const orderDate = new Date(order.createdAt);
+      const today = new Date();
+      
+      // Reset today's time to midnight
+      const startOfToday = new Date(today);
+      startOfToday.setHours(0, 0, 0, 0);
+      
+      // Calculate end of today
+      const endOfToday = new Date(today);
+      endOfToday.setHours(23, 59, 59, 999);
+      
+      // Calculate start of this week (Sunday)
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+      startOfWeek.setHours(0, 0, 0, 0);
+      
+      // Calculate start of this month
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      startOfMonth.setHours(0, 0, 0, 0);
+      
+      if (dateFilter === 'today') {
+        // Order date must be between start and end of today
+        matchesDate = orderDate >= startOfToday && orderDate <= endOfToday;
+      } else if (dateFilter === 'week') {
+        // Order date must be between start of week and now
+        matchesDate = orderDate >= startOfWeek;
+      } else if (dateFilter === 'month') {
+        // Order date must be between start of month and now
+        matchesDate = orderDate >= startOfMonth;
+      }
     }
     
     return matchesSearch && matchesStatus && matchesDate;
@@ -309,7 +396,11 @@ const TotalOrders = () => {
             <div className="flex items-center gap-2">
               <div className="relative">
                 <select
-                  className="appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className={`appearance-none border py-2 pl-3 pr-8 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    statusFilter !== 'all' 
+                      ? 'bg-purple-50 border-purple-300 text-purple-700 font-medium' 
+                      : 'bg-white border-gray-300'
+                  }`}
                   value={statusFilter}
                   onChange={(e) => {
                     setStatusFilter(e.target.value);
@@ -324,13 +415,17 @@ const TotalOrders = () => {
                   <option value="cancelled">Cancelled</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <FiFilter className="text-gray-400" />
+                  <FiFilter className={`${statusFilter !== 'all' ? 'text-purple-500' : 'text-gray-400'}`} />
                 </div>
               </div>
               
               <div className="relative">
                 <select
-                  className="appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className={`appearance-none border py-2 pl-3 pr-8 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    dateFilter !== 'all' 
+                      ? 'bg-purple-50 border-purple-300 text-purple-700 font-medium' 
+                      : 'bg-white border-gray-300'
+                  }`}
                   value={dateFilter}
                   onChange={(e) => {
                     setDateFilter(e.target.value);
@@ -343,9 +438,27 @@ const TotalOrders = () => {
                   <option value="month">This Month</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <FiFilter className="text-gray-400" />
+                  <FiFilter className={`${dateFilter !== 'all' ? 'text-purple-500' : 'text-gray-400'}`} />
                 </div>
               </div>
+              
+              {/* Clear filters button - only show when filters are active */}
+              {(statusFilter !== 'all' || dateFilter !== 'all' || searchTerm !== '') && (
+                <button
+                  onClick={() => {
+                    setStatusFilter('all');
+                    setDateFilter('all');
+                    setSearchTerm('');
+                    setCurrentPage(1);
+                  }}
+                  className="flex items-center px-3 py-2 text-sm bg-red-50 text-red-600 border border-red-200 rounded-md hover:bg-red-100 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Clear Filters
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -450,6 +563,9 @@ const TotalOrders = () => {
                     Total Amount
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Payment
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -499,6 +615,29 @@ const TotalOrders = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{order.totalPrice ? `${order.totalPrice.toFixed(2)} BDT` : '0.00 BDT'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-col">
+                        <span className={`px-2 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full ${
+                          order.paymentMethod === 'Mobile Banking' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {order.paymentMethod || 'N/A'}
+                        </span>
+                        {order.paymentMethod === 'Mobile Banking' && (
+                          <div className="mt-1">
+                            <div className="text-xs">
+                              <span className="font-semibold text-gray-700">TXN ID:</span> 
+                              {order.transactionId ? (
+                                <span className="inline-block mt-1 font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded break-all">
+                                  {order.transactionId}
+                                </span>
+                              ) : (
+                                <span className="text-red-500 font-medium">Missing</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -567,10 +706,26 @@ const TotalOrders = () => {
             </div>
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
+                <div>
                 <p className="text-sm text-gray-700">
                   Showing <span className="font-medium">{indexOfFirstOrder + 1}</span> to <span className="font-medium">{Math.min(indexOfLastOrder, filteredOrders.length)}</span> of{' '}
                   <span className="font-medium">{filteredOrders.length}</span> results
                 </p>
+                {(statusFilter !== 'all' || dateFilter !== 'all') && (
+                  <p className="text-xs text-purple-600 mt-1">
+                    {statusFilter !== 'all' && (
+                      <span className="mr-2">Status: <strong>{statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}</strong></span>
+                    )}
+                    {dateFilter !== 'all' && (
+                      <span>Period: <strong>
+                        {dateFilter === 'today' ? 'Today' : 
+                         dateFilter === 'week' ? 'This Week' : 
+                         dateFilter === 'month' ? 'This Month' : ''}
+                      </strong></span>
+                    )}
+                  </p>
+                )}
+              </div>
               </div>
               <div>
                 <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
@@ -822,9 +977,44 @@ const TotalOrders = () => {
                           <td className="px-4 py-3 text-sm font-medium text-gray-900">Number on Jersey</td>
                           <td className="px-4 py-3 text-sm text-gray-900">{selectedOrder.NumberOnJersey || 'N/A'}</td>
                         </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Payment Information */}
+                <div className="mb-6">
+                  <h4 className="text-base font-semibold text-gray-800 mb-3">Payment Information</h4>
+                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <tbody className="bg-white divide-y divide-gray-200">
                         <tr>
                           <td className="px-4 py-3 text-sm font-medium text-gray-900">Payment Method</td>
-                          <td className="px-4 py-3 text-sm text-gray-900">{selectedOrder.paymentMethod || 'N/A'}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-5 font-medium rounded-full ${
+                              selectedOrder.paymentMethod === 'Mobile Banking' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {selectedOrder.paymentMethod || 'N/A'}
+                            </span>
+                          </td>
+                        </tr>
+                        {selectedOrder.paymentMethod === 'Mobile Banking' && (
+                          <tr className="bg-blue-50">
+                            <td className="px-4 py-3 text-sm font-bold text-gray-900">Transaction ID</td>
+                            <td className="px-4 py-3 text-sm text-gray-900">
+                              {selectedOrder.transactionId ? (
+                                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded font-medium break-all">
+                                  {selectedOrder.transactionId}
+                                </span>
+                              ) : (
+                                <span className="text-red-500 font-medium">Missing</span>
+                              )}
+                            </td>
+                          </tr>
+                        )}
+                        <tr>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900">Total Amount</td>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900">৳{selectedOrder.totalPrice?.toFixed(2) || '0.00'}</td>
                         </tr>
                       </tbody>
                     </table>

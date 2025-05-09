@@ -40,6 +40,10 @@ const orderSchema = new mongoose.Schema({
     enum: ['Cash', 'Mobile Banking'],
     required: true,
   },
+  transactionId: {
+    type: String,
+    default: null
+  },
   productIds: [
     {
       type: mongoose.Schema.Types.ObjectId,

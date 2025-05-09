@@ -3,22 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import getBaseUrl from '../../utils/baseURL';
-import { MdLocalShipping, MdPendingActions, MdShoppingBag, MdOutlineCancel } from 'react-icons/md';
 import { FiPackage, FiShoppingCart } from 'react-icons/fi';
 import { HiCurrencyDollar, HiShoppingCart, HiOutlineShoppingBag, HiOutlineUsers } from 'react-icons/hi';
-import { TbPackage } from 'react-icons/tb';
 
 const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState({});
     const [selectedPeriod, setSelectedPeriod] = useState('month');
-    const [orderStatusData, setOrderStatusData] = useState({
-        pending: 2,
-        processing: 1, 
-        shipped: 3,
-        delivered: 8,
-        cancelled: 1
-    });
     
     useEffect(() => {
         const fetchData = async () => {
@@ -45,9 +36,6 @@ const Dashboard = () => {
     const calculateGrowth = () => {
         return Math.floor(Math.random() * 20) + 1; // Just for demo - replace with real calculation
     };
-
-    // Calculate total orders
-    const totalOrders = Object.values(orderStatusData).reduce((acc, curr) => acc + curr, 0);
 
     // Format currency
     const formatCurrency = (amount) => {
@@ -128,111 +116,13 @@ const Dashboard = () => {
                             <div className="mt-1 text-xl font-semibold text-gray-800">{data?.totalCustomers || 42}</div>
                         </div>
                     </div>
-                    <Link to="/dashboard/users" className="block text-center py-2 bg-indigo-50 text-indigo-600 text-sm font-medium border-t border-indigo-100 hover:bg-indigo-100 transition-colors">
-                        View Customers
-                    </Link>
+                    <div className="block text-center py-2 bg-indigo-50 text-indigo-600 text-sm font-medium border-t border-indigo-100">
+                        Customer Analytics
+                    </div>
                 </div>
             </div>
 
-            {/* Order Status */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-semibold text-gray-800">Order Status</h3>
-                    <a href="/dashboard/total-orders" onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = "/dashboard/total-orders";
-                    }} className="text-sm text-purple-600 hover:text-purple-700 cursor-pointer">
-                        View All
-                    </a>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    {/* Pending */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center mb-2">
-                            <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-2">
-                                <MdPendingActions className="w-4 h-4" />
-                            </div>
-                            <span className="font-medium text-gray-700">Pending</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.pending}</div>
-                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                                className="bg-yellow-500 h-full rounded-full" 
-                                style={{ width: `${(orderStatusData.pending / totalOrders) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    
-                    {/* Processing */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center mb-2">
-                            <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 mr-2">
-                                <TbPackage className="w-4 h-4" />
-                            </div>
-                            <span className="font-medium text-gray-700">Processing</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.processing}</div>
-                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                                className="bg-orange-500 h-full rounded-full" 
-                                style={{ width: `${(orderStatusData.processing / totalOrders) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    
-                    {/* Shipped */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center mb-2">
-                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
-                                <MdLocalShipping className="w-4 h-4" />
-                            </div>
-                            <span className="font-medium text-gray-700">Shipped</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.shipped}</div>
-                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                                className="bg-blue-500 h-full rounded-full" 
-                                style={{ width: `${(orderStatusData.shipped / totalOrders) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    
-                    {/* Delivered */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center mb-2">
-                            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2">
-                                <MdShoppingBag className="w-4 h-4" />
-                            </div>
-                            <span className="font-medium text-gray-700">Delivered</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.delivered}</div>
-                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                                className="bg-green-500 h-full rounded-full" 
-                                style={{ width: `${(orderStatusData.delivered / totalOrders) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    
-                    {/* Cancelled */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center mb-2">
-                            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-2">
-                                <MdOutlineCancel className="w-4 h-4" />
-                            </div>
-                            <span className="font-medium text-gray-700">Cancelled</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{orderStatusData.cancelled}</div>
-                        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                                className="bg-red-500 h-full rounded-full" 
-                                style={{ width: `${(orderStatusData.cancelled / totalOrders) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             {/* Recent Orders */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { HiViewGridAdd, HiHome, HiUsers } from "react-icons/hi";
+import { HiViewGridAdd, HiHome } from "react-icons/hi";
 import { MdOutlineManageHistory, MdDashboard, MdNotifications, MdInsights, MdSettings } from "react-icons/md";
 import { FiShoppingCart, FiLogOut, FiUser, FiSettings, FiMenu, FiMessageSquare, FiHelpCircle } from "react-icons/fi";
 import Loading from '../../components/Loading';
@@ -40,7 +40,6 @@ const DashboardLayout = () => {
     { path: "/dashboard/manage-merchandise", icon: <MdOutlineManageHistory className="h-5 w-5" />, label: "Products" },
     { path: "/dashboard/add-new-merchandise", icon: <HiViewGridAdd className="h-5 w-5" />, label: "Add Product" },
     { path: "/dashboard/total-orders", icon: <FiShoppingCart className="h-5 w-5" />, label: "Orders" },
-    { path: "/dashboard/users", icon: <HiUsers className="h-5 w-5" />, label: "Users" },
   ];
   
   // Secondary nav items

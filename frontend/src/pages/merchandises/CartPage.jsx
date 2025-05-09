@@ -8,7 +8,7 @@ const CartPage = () => {
     const cartItems = useSelector(state => state.cart.cartItems);
     const dispatch = useDispatch();
 
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2);
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.Price, 0).toFixed(2);
 
     const handleRemoveFromCart = (product) => {
         dispatch(removeFromCart(product));
@@ -51,7 +51,7 @@ const CartPage = () => {
                                                     {product.title}
                                                 </Link>
                                             </h3>
-                                            <p className="ml-4">৳{product.price}</p>
+                                            <p className="ml-4">৳{product.Price}</p>
                                         </div>
                                         <p className="mt-0.5 text-xs text-gray-500 capitalize">
                                             <strong>Category:</strong> {product.category}

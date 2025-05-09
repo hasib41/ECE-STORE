@@ -18,6 +18,22 @@ const OrderPage = () => {
     skip: !userEmail 
   });
 
+  // Debug orders data when it changes
+  React.useEffect(() => {
+    if (orders && orders.length > 0) {
+      console.log('Orders received:', orders);
+      // Check for Mobile Banking orders
+      const mobileOrders = orders.filter(order => order.paymentMethod === 'Mobile Banking');
+      if (mobileOrders.length > 0) {
+        console.log('Mobile Banking orders:', mobileOrders);
+        mobileOrders.forEach(order => {
+          console.log(`Order ID: ${order._id}, has transactionId: ${!!order.transactionId}`);
+          console.log('Order fields:', Object.keys(order));
+        });
+      }
+    }
+  }, [orders]);
+
   if (!userEmail) {
     return (
       <div className="container mx-auto p-6">
@@ -95,52 +111,109 @@ const OrderPage = () => {
           {orders.map((order, index) => (
             <div
               key={order._id}
-              className="border p-4 rounded shadow-md bg-white"
+              className="border p-6 rounded-lg shadow-md bg-white"
             >
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-sm text-gray-500"># Order {index + 1}</p>
-                <p className="text-xs text-gray-400">
-                  {new Date(order.createdAt).toLocaleString()}
-                </p>
+              <div className="flex justify-between items-center mb-4 border-b pb-4">
+                <div>
+                  <h2 className="font-bold text-lg text-gray-800">Order #{index + 1}</h2>
+                  <p className="text-xs text-gray-500">ID: {order._id}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-700">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(order.createdAt).toLocaleTimeString()}
+                  </p>
+                </div>
               </div>
-              <h2 className="font-bold mb-2 text-lg">Order ID: {order._id}</h2>
-              <p>
-                <strong>Name:</strong> {order.name}
-              </p>
-              <p>
-                <strong>Student ID:</strong> {order.studentId}
-              </p>
-              <p>
-                <strong>Email:</strong> {order.email}
-              </p>
-              <p>
-                <strong>Phone:</strong> {order.phone}
-              </p>
-              <p>
-                <strong>Size:</strong> {order.size}
-              </p>
-              <p>
-                <strong>Sleeve Type:</strong> {order.sleeveType}
-              </p>
-              <p>
-                <strong>Name on Jersey:</strong> {order.NameOnJersey}
-              </p>
-              <p>
-                <strong>Number on Jersey:</strong> {order.NumberOnJersey}
-              </p>
-              <p>
-                <strong>Payment Method:</strong> {order.paymentMethod}
-              </p>
-              <p>
-                <strong>Total Price:</strong> ৳{order.totalPrice}
-              </p>
-              <div className="mt-3">
-                <h3 className="font-semibold">Product IDs:</h3>
-                <ul className="list-disc ml-5 text-sm text-gray-700">
-                  {order.productIds.map((productId) => (
-                    <li key={productId}>{productId}</li>
+
+              <div className="grid md:grid-cols-2 gap-x-6 gap-y-3">
+                <div>
+                  <h3 className="font-semibold text-gray-700 mb-2">Personal Details</h3>
+                  <p className="text-gray-700"><span className="font-medium">Name:</span> {order.name}</p>
+                  <p className="text-gray-700"><span className="font-medium">Student ID:</span> {order.studentId}</p>
+                  <p className="text-gray-700"><span className="font-medium">Email:</span> {order.email}</p>
+                  <p className="text-gray-700"><span className="font-medium">Phone:</span> {order.phone}</p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-700 mb-2">Order Details</h3>
+                  <p className="text-gray-700"><span className="font-medium">Size:</span> {order.size}</p>
+                  <p className="text-gray-700"><span className="font-medium">Sleeve Type:</span> {order.sleeveType}</p>
+                  <p className="text-gray-700"><span className="font-medium">Name on Jersey:</span> {order.NameOnJersey}</p>
+                  <p className="text-gray-700"><span className="font-medium">Number on Jersey:</span> {order.NumberOnJersey}</p>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t">
+                <h3 className="font-semibold text-gray-700 mb-2">Payment Information</h3>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <p className="text-gray-700">
+                    <span className="font-medium">Payment Method:</span>
+                    <span className={`ml-2 px-2 py-0.5 text-sm rounded-full ${
+                      order.paymentMethod === 'Mobile Banking' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
+                    }`}>
+                      {order.paymentMethod}
+                    </span>
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-medium">Total Price:</span> 
+                    <span className="ml-2 font-bold text-green-700">৳{order.totalPrice}</span>
+                  </p>
+                  
+                  {order.paymentMethod === 'Mobile Banking' && (
+                    <div className="w-full mt-2 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                      <p className="text-gray-700">
+                        <span className="font-medium">Transaction ID:</span>
+                        {order.transactionId ? (
+                          <span className="ml-2 bg-blue-100 text-blue-700 px-3 py-1 rounded font-medium inline-block mt-1">
+                            {order.transactionId}
+                          </span>
+                        ) : (
+                          <span className="ml-2 text-red-500 italic">Not provided</span>
+                        )}
+                      </p>
+                      {/* Additional debug info */}
+                      <div className="text-xs text-gray-500 mt-1">
+                        {JSON.stringify(order.transactionId) === undefined ? 
+                          "(Field missing)" : 
+                          order.transactionId === null ? 
+                            "(Field is null)" : 
+                            order.transactionId === "" ? 
+                              "(Field is empty)" : 
+                              ""}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t">
+                <h3 className="font-semibold text-gray-700 mb-2">Order Status</h3>
+                <div className="flex items-center">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    order.status === 'delivered' ? 'bg-green-100 text-green-800' : 
+                    order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                    order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                    order.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
+                    'bg-purple-100 text-purple-800'
+                  }`}>
+                    {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t">
+                <h3 className="font-semibold text-gray-700 mb-2">Products</h3>
+                <div className="text-sm text-gray-600 space-y-1">
+                  {order.productIds.map((productId, i) => (
+                    <div key={i} className="flex items-center">
+                      <span className="h-2 w-2 bg-primary rounded-full mr-2"></span>
+                      <span>Product {i+1}: {typeof productId === 'object' ? productId.title || 'Unknown' : productId}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           ))}

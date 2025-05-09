@@ -14,6 +14,12 @@ app.use(cors({
     credentials: true
 }));
 
+// Logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 // Serve static files from the uploads directory
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
